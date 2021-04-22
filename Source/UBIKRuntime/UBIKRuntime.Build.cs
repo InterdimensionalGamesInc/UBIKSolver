@@ -8,6 +8,9 @@ public class UBIKRuntime : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
+		// Enable if you want to debug the module (reduces inlining and optimization restructuring)
+		//OptimizeCode = CodeOptimization.Never;
+		
 		PublicIncludePaths.AddRange(
 			new string[] {
 				// ... add public include paths required here ...

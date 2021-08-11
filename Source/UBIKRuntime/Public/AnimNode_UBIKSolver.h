@@ -111,6 +111,24 @@ public:
     FRotator PelvisRotationOffset = FRotator(90.f, 0.f, 90.f);
 
     UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator Spine1RotationOffset = FRotator(83.f, 0.f, 90.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator Spine2RotationOffset = FRotator(104.0f, 0.f, 90.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator Spine3RotationOffset = FRotator(86.22f, 0.f, 90.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator ClavicleLRotationOffset = FRotator(0.f, 0.f, 0.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator UpperArmLRotationOffset = FRotator(0.f, 0.f, 0.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
+    FRotator LowerArmLRotationOffset = FRotator(0.f, 0.f, 0.f);
+
+    UPROPERTY(EditAnywhere, Category = Bones)
     FRotator HandLRotationOffset = FRotator(0.f, -25.f, 180.f);
 
     UPROPERTY(EditAnywhere, Category = Bones)
@@ -124,15 +142,6 @@ public:
 
     UPROPERTY(EditAnywhere, Category = Bones)
     FRotator HandRRotationOffset = FRotator(180.f, 25.f, 180.f);
-
-    UPROPERTY(EditAnywhere, Category = Bones)
-    FRotator Spine1RotationOffset = FRotator(83.f, 0.f, 90.f);
-
-    UPROPERTY(EditAnywhere, Category = Bones)
-    FRotator Spine2RotationOffset = FRotator(104.0f, 0.f, 90.f);
-
-    UPROPERTY(EditAnywhere, Category = Bones)
-    FRotator Spine3RotationOffset = FRotator(86.22f, 0.f, 90.f);
 
     UPROPERTY(EditAnywhere, Category = Bones)
     float RotationAxisMult = 90.0f;

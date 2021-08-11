@@ -85,9 +85,9 @@ void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePose
     PelvisRotation = FTransform(UKismetMathLibrary::ComposeRotators(PelvisRotationOffset, Spine01_Rotation),
                                 BaseCharTransformComponentSpace.GetTranslation(), FVector::OneVector);
 
-    ClavicleLRotation = LeftClavicleComponentSpace.Rotator();
-    UpperArmLRotation = LeftUpperArmTransformComponentSpace.Rotator();
-    LowerArmLRotation = LeftLowerArmTransformComponentSpace.Rotator();
+    ClavicleLRotation = FRotator(LeftClavicleComponentSpace.Rotator().Quaternion() * ClavicleLRotationOffset.Quaternion());
+    UpperArmLRotation = FRotator(LeftUpperArmTransformComponentSpace.Rotator().Quaternion() * UpperArmLRotationOffset.Quaternion());
+    LowerArmLRotation = FRotator(LeftLowerArmTransformComponentSpace.Rotator().Quaternion() * LowerArmLRotationOffset.Quaternion());
     HandLRotation = FRotator(LeftHandTransformComponentSpace.Rotator().Quaternion() * HandLRotationOffset.Quaternion());
 
     ClavicleRRotation = FRotator(RightClavicleComponentSpace.Rotator().Quaternion() * ClavicleRRotationOffset.Quaternion());

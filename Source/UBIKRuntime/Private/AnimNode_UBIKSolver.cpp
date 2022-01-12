@@ -34,7 +34,7 @@ void FAnimNode_UBIKSolver::Initialize_AnyThread(const FAnimationInitializeContex
 {
     Super::Initialize_AnyThread(Context);
 
-    Context.AnimInstanceProxy->GetSkelMeshComponent()->SetTickGroup(TG_DuringPhysics);
+    //Context.AnimInstanceProxy->GetSkelMeshComponent()->SetTickGroup(TG_DuringPhysics);
 }
 
 void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePoseContext& Output, TArray<FBoneTransform>& OutBoneTransforms)
@@ -78,10 +78,19 @@ void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePose
 #endif
 
     HeadRotation = UKismetMathLibrary::ComposeRotators(HeadRotationOffset, HeadTransformComponentSpace.Rotator());
-    Spine03_Rotation = FMath::RInterpTo(Spine03_Rotation, BaseCharTransformComponentSpace.Rotator(), CachedDeltaTime,
-                                        Settings.BodyInterSpeed);
-    Spine02_Rotation = FMath::RInterpTo(Spine02_Rotation, Spine03_Rotation, CachedDeltaTime, Settings.BodyInterSpeed);
-    Spine01_Rotation = FMath::RInterpTo(Spine01_Rotation, Spine02_Rotation, CachedDeltaTime, Settings.BodyInterSpeed);
+    if(UseInterpolation)
+    {
+        Spine03_Rotation = FMath::RInterpTo(Spine03_Rotation, BaseCharTransformComponentSpace.Rotator(), CachedDeltaTime,
+                                            Settings.BodyInterSpeed);
+        Spine02_Rotation = FMath::RInterpTo(Spine02_Rotation, Spine03_Rotation, CachedDeltaTime, Settings.BodyInterSpeed);
+        Spine01_Rotation = FMath::RInterpTo(Spine01_Rotation, Spine02_Rotation, CachedDeltaTime, Settings.BodyInterSpeed);
+    }
+    else
+    {
+        Spine03_Rotation = BaseCharTransformComponentSpace.Rotator();
+        Spine02_Rotation = Spine03_Rotation;
+        Spine01_Rotation = Spine02_Rotation;
+    }
     PelvisRotation = FTransform(UKismetMathLibrary::ComposeRotators(PelvisRotationOffset, Spine01_Rotation),
                                 BaseCharTransformComponentSpace.GetTranslation(), FVector::OneVector);
 
@@ -494,9 +503,15 @@ void FAnimNode_UBIKSolver::SolveArms()
 
     float SafeAngle = UUBIK::SafeguardAngle(LeftElbowHandAngle, Angle, 120.f);
 
-    LeftElbowHandAngle = FMath::FInterpTo(LeftElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftElbowHandAngle: %f"), LeftElbowHandAngle);
-
+    if(UseInterpolation)
+    {
+        LeftElbowHandAngle = FMath::FInterpTo(LeftElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
+        //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftElbowHandAngle: %f"), LeftElbowHandAngle);
+    }
+    else
+    {
+        LeftElbowHandAngle = SafeAngle;
+    }
     RotateElbow(LeftElbowHandAngle + BaseAngle, UpperArmBase, LowerArmBase, HandLoc, true, LeftUpperArmTransformS, LeftLowerArmTransformS);
     //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftElbowHandAngle + BaseAngle: %f"), LeftElbowHandAngle + BaseAngle);
     //UE_LOG(LogUBIKRuntime, Display, TEXT("LUAS: %s LLAS: %s"), *LeftUpperArmTransformS.ToString(), *LeftLowerArmTransformS.ToString());
@@ -529,9 +544,15 @@ void FAnimNode_UBIKSolver::SolveArms()
 
     SafeAngle = UUBIK::SafeguardAngle(RightElbowHandAngle, Angle, 120.f);
 
-    RightElbowHandAngle = FMath::FInterpTo(RightElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RightElbowHandAngle: %f"), RightElbowHandAngle);
-
+    if(UseInterpolation)
+    {
+        RightElbowHandAngle = FMath::FInterpTo(RightElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
+        //UE_LOG(LogUBIKRuntime, Display, TEXT("RightElbowHandAngle: %f"), RightElbowHandAngle);
+    }
+    else
+    {
+        RightElbowHandAngle = SafeAngle;
+    }
     RotateElbow(RightElbowHandAngle + BaseAngle, UpperArmBase, LowerArmBase, HandLoc, false, RightUpperArmTransformS,
                 RightLowerArmTransformS);
     RightUpperArmTransformWorld = RightUpperArmTransformS * ShoulderTransformWorld;

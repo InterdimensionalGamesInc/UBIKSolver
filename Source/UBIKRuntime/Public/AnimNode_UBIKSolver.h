@@ -52,6 +52,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
     FUBIKSettings Settings;
 
+    /** Should interpolation be applied? */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    bool UseInterpolation;
+
     //** Head bone to modify */
     UPROPERTY(EditAnywhere, Category = Bones)
     FBoneReference HeadBoneToModify = FBoneReference("head");
